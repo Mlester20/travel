@@ -28,10 +28,4 @@
     //sample usage
     $db = new Database();
     $con = $db->getConnection();
-
-    if($con){
-        echo "Connected successfully";
-    }else{
-        echo "Connection failed";
-    }
 ?>
