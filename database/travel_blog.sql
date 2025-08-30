@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 29, 2025 at 06:23 PM
+-- Generation Time: Aug 30, 2025 at 12:54 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -38,6 +38,13 @@ CREATE TABLE `posts` (
   `status` enum('active','archived') DEFAULT 'active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `posts`
+--
+
+INSERT INTO `posts` (`id`, `user_id`, `title`, `description`, `image_path`, `posted_at`, `edited_at`, `status`) VALUES
+(1, 1, 'Test', 'Best Destination in Ilocos', 'uploads/68b2d22d3acb5.jpg', '2025-08-30 10:27:57', '2025-08-30 10:27:57', 'active');
+
 -- --------------------------------------------------------
 
 --
@@ -48,6 +55,7 @@ CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `bio` varchar(50) NOT NULL,
+  `profile` varchar(250) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -56,8 +64,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `name`, `bio`, `email`, `password`) VALUES
-(1, 'Mark Lester Raguindin', '', 'suguitanmark123@gmail.com', '202cb962ac59075b964b07152d234b70');
+INSERT INTO `users` (`user_id`, `name`, `bio`, `profile`, `email`, `password`) VALUES
+(1, 'Mark Lester Raguindin', 'Ngani', 'uploads/profiles/profile_68b2d837519824.87275281.jpg', 'suguitanmark123@gmail.com', '202cb962ac59075b964b07152d234b70');
 
 --
 -- Indexes for dumped tables
@@ -84,7 +92,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
