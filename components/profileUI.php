@@ -16,16 +16,23 @@
                     <!-- Profile Picture -->
                     <div class="relative">
                         <div class="w-32 h-32 bg-white rounded-full border-4 border-white shadow-lg overflow-hidden">
-                            <div class="w-full h-full bg-gradient-to-br from-travel-blue to-travel-orange flex items-center justify-center text-white text-4xl font-bold">
-                                <?php echo substr($_SESSION['name'] ?? 'U', 0, 1); ?>
+                            <div id="profilePicContainer" class="w-full h-full">
+                                <?php if (isset($_SESSION['profile']) && !empty($_SESSION['profile'])) : ?>
+                                    <img src="<?php echo $_SESSION['profile']; ?>" class="w-full h-full object-cover">
+                                <?php else : ?>
+                                    <div class="w-full h-full bg-gradient-to-br from-travel-blue to-travel-orange flex items-center justify-center text-white text-4xl font-bold">
+                                        <?php echo substr($_SESSION['name'] ?? 'U', 0, 1); ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <!-- Profile Picture Edit Button -->
-                        <button class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 transition">
+                        <label class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 transition cursor-pointer">
+                            <input type="file" id="profilePicInput" class="hidden" accept="image/*">
                             <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
                             </svg>
-                        </button>
+                        </label>
                     </div>
                     <!-- Profile Info -->
                     <div class="md:ml-8 mt-4 md:mt-0 text-center md:text-left flex-grow">
@@ -108,3 +115,48 @@
             </div>
         </div>
     </main>
+
+    <script>
+        // Handle profile picture change
+        document.getElementById('profilePicInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Show preview immediately
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const container = document.getElementById('profilePicContainer');
+                    container.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+                }
+                reader.readAsDataURL(file);
+
+                // Upload to server
+                const formData = new FormData();
+                formData.append('action', 'update_profile_picture');
+                formData.append('profile_picture', file);
+
+                fetch('controllers/updateProfile.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        // Update session and profile picture display
+                        const container = document.getElementById('profilePicContainer');
+                        container.innerHTML = `<img src="${data.path}" class="w-full h-full object-cover">`;
+                    } else {
+                        // Handle error and revert to initial state
+                        alert('Error updating profile picture: ' + data.message);
+                        const container = document.getElementById('profilePicContainer');
+                        container.innerHTML = `<div class="w-full h-full bg-gradient-to-br from-travel-blue to-travel-orange flex items-center justify-center text-white text-4xl font-bold">
+                            <?php echo substr($_SESSION['name'] ?? 'U', 0, 1); ?>
+                        </div>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error uploading profile picture');
+                });
+            }
+        });
+    </script>

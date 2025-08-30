@@ -13,7 +13,7 @@ $user_id = $_SESSION['user_id'];
 
 try {
     // Fetch user profile data with your actual database columns
-    $stmt = $con->prepare("SELECT user_id, name, bio, email FROM users WHERE user_id = ?");
+    $stmt = $con->prepare("SELECT user_id, name, bio, email, profile FROM users WHERE user_id = ?");
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();

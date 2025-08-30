@@ -24,7 +24,7 @@
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex items-center space-x-8">
                 <a href="home.php" class="text-gray-700 hover:text-travel-blue font-medium transition duration-300">Home</a>
-                <a href="#" class="text-gray-700 hover:text-travel-blue font-medium transition duration-300">Destinations</a>
+                <a href="destinations.php" class="text-gray-700 hover:text-travel-blue font-medium transition duration-300">Destinations</a>
                 <a href="vlogs.php" class="text-gray-700 hover:text-travel-blue font-medium transition duration-300">Vlogs</a>
                 <a href="#" class="text-gray-700 hover:text-travel-blue font-medium transition duration-300">About</a>
                 <!-- <a href="#" class="text-gray-700 hover:text-travel-blue font-medium transition duration-300">Contact</a> -->
@@ -76,7 +76,7 @@
     <div id="mobileMenu" class="hidden md:hidden bg-white border-t">
         <div class="px-4 py-2 space-y-2">
             <a href="#" class="block py-2 text-gray-700 hover:text-travel-blue">Home</a>
-            <a href="#" class="block py-2 text-gray-700 hover:text-travel-blue">Destinations</a>
+            <a href="destinations.php" class="block py-2 text-gray-700 hover:text-travel-blue">Destinations</a>
             <a href="#" class="block py-2 text-gray-700 hover:text-travel-blue">Vlogs</a>
             <a href="#" class="block py-2 text-gray-700 hover:text-travel-blue">About</a>
             <!-- <a href="#" class="block py-2 text-gray-700 hover:text-travel-blue">Contact</a> -->
