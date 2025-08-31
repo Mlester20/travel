@@ -17,11 +17,30 @@
                     <div class="relative">
                         <div class="w-32 h-32 bg-white rounded-full border-4 border-white shadow-lg overflow-hidden">
                             <div id="profilePicContainer" class="w-full h-full">
-                                <?php if (isset($_SESSION['profile']) && !empty($_SESSION['profile'])) : ?>
-                                    <img src="<?php echo $_SESSION['profile']; ?>" class="w-full h-full object-cover">
+                                <?php
+                                require_once 'includes/config.php';
+                                $db = new Database();
+                                $conn = $db->connect();
+                                
+                                $user_id = $_SESSION['user_id'] ?? null;
+                                if ($user_id) {
+                                    $query = "SELECT profile FROM users WHERE user_id = ?";
+                                    $stmt = $conn->prepare($query);
+                                    $stmt->bind_param("i", $user_id);
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
+                                    $user = $result->fetch_assoc();
+                                    $profile_img = $user['profile'] ?? '';
+                                    $stmt->close();
+                                }
+                                ?>
+                                <?php if (isset($profile_img) && !empty($profile_img)) : ?>
+                                    <img src="<?php echo $profile_img; ?>" class="w-full h-full object-cover" alt="Profile Picture">
                                 <?php else : ?>
                                     <div class="w-full h-full bg-gradient-to-br from-travel-blue to-travel-orange flex items-center justify-center text-white text-4xl font-bold">
-                                        <?php echo substr($_SESSION['name'] ?? 'U', 0, 1); ?>
+                                        <svg class="w-16 h-16 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg>
                                     </div>
                                 <?php endif; ?>
                             </div>

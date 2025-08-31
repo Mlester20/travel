@@ -44,17 +44,50 @@
                     </svg>
                 </div>
                 <div class="relative">
+                    <?php 
+                        $profile_img = '';
+                        $name = '';
+                        if(isset($_SESSION['user_id'])) {
+                            require_once 'includes/config.php';
+                            $db = new Database();
+                            $conn = $db->connect();
+                            
+                            $user_id = $_SESSION['user_id'];
+                            $query = "SELECT profile, name FROM users WHERE user_id = ?";
+                            $stmt = $conn->prepare($query);
+                            $stmt->bind_param("i", $user_id);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            if($user = $result->fetch_assoc()) {
+                                $profile_img = $user['profile'];
+                                $name = $user['name'];
+                            }
+                            $stmt->close();
+                        }
+                    ?>
                     <button
                         onclick="toggleProfileDropdown()"
-                        class="bg-gradient-to-r from-travel-blue to-travel-orange text-white px-4 py-2 rounded-full hover:shadow-lg transition duration-300 flex items-center space-x-2">
-                        <span><?php echo isset($_SESSION['name']) ? $_SESSION['name'] : 'Guest'; ?></span>
+                        class="bg-gradient-to-r from-travel-blue to-travel-orange text-white px-2 py-1 rounded-full hover:shadow-lg transition duration-300 flex items-center space-x-2">
+                        <div class="flex items-center space-x-2">
+                            <?php if(isset($_SESSION['user_id']) && !empty($profile_img)): ?>
+                                <img src="<?php echo $profile_img; ?>" alt="Profile" class="w-8 h-8 rounded-full object-cover border-2 border-white">
+                            <?php else: ?>
+                                <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                            <?php endif; ?>
+                        </div>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <!-- Dropdown Menu -->
                     <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
-                        <a href="profile.php" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-travel-blue">Profile</a>
+                        <a href="profile.php" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-travel-blue"> <?php echo htmlspecialchars($_SESSION['name']); ?>
+                        </a>
+                        <hr>
                         <a href="settings.php" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-travel-blue">Settings</a>
                         <a href="logout.php" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-travel-blue">Logout</a>
                     </div>
