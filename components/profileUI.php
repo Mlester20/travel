@@ -1,8 +1,14 @@
+<?php
+if (!isset($profileData)) {
+    die("Profile data not available");
+}
+?>
     <main class="container mx-auto px-4 py-8">
         <!-- Profile Header -->
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
             <div class="h-48 bg-gradient-to-r from-travel-blue to-travel-orange relative">
                 <!-- Cover Photo Edit Button -->
+                <?php if ($profileData['is_own_profile']): ?>
                 <button class="absolute bottom-4 right-4 bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-lg hover:bg-white/30 transition flex items-center space-x-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
@@ -10,6 +16,7 @@
                     </svg>
                     <span>Edit Cover</span>
                 </button>
+                <?php endif; ?>
             </div>
             <div class="px-8 pb-8 mt-8">
                 <div class="flex flex-col md:flex-row items-center md:items-end -mt-20 mb-8">
@@ -17,25 +24,8 @@
                     <div class="relative">
                         <div class="w-32 h-32 bg-white rounded-full border-4 border-white shadow-lg overflow-hidden">
                             <div id="profilePicContainer" class="w-full h-full">
-                                <?php
-                                require_once 'includes/config.php';
-                                $db = new Database();
-                                $conn = $db->connect();
-                                
-                                $user_id = $_SESSION['user_id'] ?? null;
-                                if ($user_id) {
-                                    $query = "SELECT profile FROM users WHERE user_id = ?";
-                                    $stmt = $conn->prepare($query);
-                                    $stmt->bind_param("i", $user_id);
-                                    $stmt->execute();
-                                    $result = $stmt->get_result();
-                                    $user = $result->fetch_assoc();
-                                    $profile_img = $user['profile'] ?? '';
-                                    $stmt->close();
-                                }
-                                ?>
-                                <?php if (isset($profile_img) && !empty($profile_img)) : ?>
-                                    <img src="<?php echo $profile_img; ?>" class="w-full h-full object-cover" alt="Profile Picture">
+                                <?php if (!empty($profileData['profile'])) : ?>
+                                    <img src="<?php echo htmlspecialchars($profileData['profile']); ?>" class="w-full h-full object-cover" alt="Profile Picture">
                                 <?php else : ?>
                                     <div class="w-full h-full bg-gradient-to-br from-travel-blue to-travel-orange flex items-center justify-center text-white text-4xl font-bold">
                                         <svg class="w-16 h-16 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,12 +36,14 @@
                             </div>
                         </div>
                         <!-- Profile Picture Edit Button -->
+                        <?php if ($profileData['is_own_profile']): ?>
                         <label class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 transition cursor-pointer">
                             <input type="file" id="profilePicInput" class="hidden" accept="image/*">
                             <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
                             </svg>
                         </label>
+                        <?php endif; ?>
                     </div>
                     <!-- Profile Info -->
                     <div class="md:ml-8 mt-4 md:mt-0 text-center md:text-left flex-grow">
@@ -59,12 +51,14 @@
                         <p class="text-gray-600 mt-2" id="profileBio">Loading...</p>
                     </div>
                     <!-- Edit Profile Button -->
+                    <?php if ($profileData['is_own_profile']): ?>
                     <button class="mt-4 md:mt-0 bg-gradient-to-r from-travel-blue to-travel-orange text-white px-6 py-2 rounded-full hover:shadow-lg transition duration-300 flex items-center space-x-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
                         </svg>
                         <span>Edit Profile</span>
                     </button>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Profile Stats -->
@@ -135,6 +129,7 @@
         </div>
     </main>
 
+    <?php if ($profileData['is_own_profile']): ?>
     <script>
         // Handle profile picture change
         document.getElementById('profilePicInput').addEventListener('change', function(e) {
@@ -168,7 +163,9 @@
                         alert('Error updating profile picture: ' + data.message);
                         const container = document.getElementById('profilePicContainer');
                         container.innerHTML = `<div class="w-full h-full bg-gradient-to-br from-travel-blue to-travel-orange flex items-center justify-center text-white text-4xl font-bold">
-                            <?php echo substr($_SESSION['name'] ?? 'U', 0, 1); ?>
+                            <svg class="w-16 h-16 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
                         </div>`;
                     }
                 })
@@ -179,3 +176,4 @@
             }
         });
     </script>
+    <?php endif; ?>

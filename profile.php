@@ -1,12 +1,24 @@
 <?php
 session_start();
 require 'includes/config.php';
-
-$db = new Database();
-$con = $db->getConnection();
+// Tell getProfileData.php that it's being included from the root directory
+define('DIRECT_ACCESS', false);
+require 'controllers/getProfileData.php';
 
 if(!isset($_SESSION['user_id'])){
     header("Location: index.php");
+    exit();
+}
+
+// Get the profile user_id from URL, if not set, show current user's profile
+$profile_user_id = isset($_GET['id']) ? (int)$_GET['id'] : $_SESSION['user_id'];
+
+// Get profile data
+$profileData = getProfileData($profile_user_id);
+
+if (!$profileData) {
+    // User not found, redirect to own profile
+    header("Location: profile.php");
     exit();
 }
 ?>
@@ -35,11 +47,23 @@ if(!isset($_SESSION['user_id'])){
 </head>
 <body class="bg-gray-50">
     <?php include 'components/header.php'; ?>
-
+    
     <?php include 'components/profileUI.php'; ?>
-
-
-
+    
+    <script>
+        // Initialize profile data from server-side PHP
+        const profileData = <?php echo json_encode($profileData); ?>;
+        
+        // Update profile information immediately
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('profileName').textContent = profileData.name || 'No name';
+            document.getElementById('profileBio').textContent = profileData.bio || 'No bio available';
+        });
+    </script>
+    
+    <!-- Only include the fetch script if viewing your own profile -->
+    <?php if ($profileData['is_own_profile']): ?>
     <script src="js/fetchProfile.js"></script>
+    <?php endif; ?>
 </body>
 </html>

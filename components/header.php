@@ -1,3 +1,9 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
+<script src="js/searchUsers.js"></script>
 <header class="bg-white shadow-lg sticky top-0 z-50">
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between h-16">
@@ -33,8 +39,9 @@
             <!-- Search and Profile -->
             <div class="flex items-center space-x-4">
                 <div class="relative hidden sm:block">
-                    <input type="text" placeholder="Search destinations..."
-                        class="pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-travel-blue focus:border-transparent">
+                    <input type="text" id="searchPeople" placeholder="Search people..."
+                        class="pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-travel-blue focus:border-transparent"
+                        onkeyup="searchUsers(this.value)">
                     <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"
                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -42,6 +49,10 @@
                                11-14 0 7 7 0 0114 0z">
                         </path>
                     </svg>
+                    <!-- Search Results Dropdown -->
+                    <div id="searchResults" class="hidden absolute left-0 right-0 mt-2 bg-white rounded-lg shadow-lg max-h-96 overflow-y-auto z-50">
+                        <!-- Search results will be populated here via JavaScript -->
+                    </div>
                 </div>
                 <div class="relative">
                     <?php 
