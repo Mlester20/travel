@@ -93,39 +93,36 @@ if (!isset($profileData)) {
                     <button class="px-6 py-4 text-gray-600 hover:text-gray-800 font-medium">Saved</button>
                 </div>
             </div>
-            
-            <!-- Posts Grid -->
-            <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Sample Post Cards - Replace with actual data -->
-                    <div class="bg-gray-50 rounded-xl overflow-hidden shadow hover:shadow-md transition">
-                        <div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500"></div>
-                        <div class="p-4">
-                            <h3 class="font-semibold text-gray-800">Beautiful Sunset in Bali</h3>
-                            <p class="text-gray-600 text-sm mt-1">Amazing evening at Uluwatu Temple watching the sunset...</p>
-                            <div class="flex items-center justify-between mt-4">
-                                <div class="flex items-center space-x-4 text-gray-600 text-sm">
-                                    <span class="flex items-center">
-                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"></path>
-                                        </svg>
-                                        128
-                                    </span>
-                                    <span class="flex items-center">
-                                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd"></path>
-                                        </svg>
-                                        24
-                                    </span>
-                                </div>
-                                <span class="text-gray-500 text-sm">2 days ago</span>
-                            </div>
-                        </div>
+                
+            <div class="container mx-auto px-4 py-8">
+                <div class="mb-6 flex justify-between items-center">
+                    <h1 class="text-3xl font-bold text-gray-800">My Posts</h1>
+                    <div class="flex space-x-3">
+                        <button onclick="postFetcher.refresh()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">
+                            <svg class="w-4 h-4 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                            </svg>
+                            Refresh
+                        </button>
+                        <button onclick="createNewPost()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                            <svg class="w-4 h-4 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                            </svg>
+                            New Post
+                        </button>
                     </div>
+                </div>
 
-                    <!-- Add more post cards here -->
+                <!-- Posts Container - This will be populated dynamically -->
+                <div id="posts-container" class="p-6">
+                    <!-- Posts will be loaded here by JavaScript -->
+                    <div class="flex items-center justify-center py-12">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                        <span class="ml-3 text-gray-600">Loading posts...</span>
+                    </div>
                 </div>
             </div>
+
         </div>
     </main>
 

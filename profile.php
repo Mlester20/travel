@@ -1,9 +1,9 @@
 <?php
 session_start();
 require 'includes/config.php';
-// Tell getProfileData.php that it's being included from the root directory
 define('DIRECT_ACCESS', false);
 require 'controllers/getProfileData.php';
+
 
 if(!isset($_SESSION['user_id'])){
     header("Location: index.php");
@@ -17,7 +17,6 @@ $profile_user_id = isset($_GET['id']) ? (int)$_GET['id'] : $_SESSION['user_id'];
 $profileData = getProfileData($profile_user_id);
 
 if (!$profileData) {
-    // User not found, redirect to own profile
     header("Location: profile.php");
     exit();
 }
@@ -61,9 +60,11 @@ if (!$profileData) {
         });
     </script>
     
-    <!-- Only include the fetch script if viewing your own profile -->
     <?php if ($profileData['is_own_profile']): ?>
     <script src="js/fetchProfile.js"></script>
     <?php endif; ?>
+
+    <!-- external script -->
+    <script src="js/fetchPost.js"></script>
 </body>
 </html>
